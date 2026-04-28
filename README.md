@@ -11,6 +11,19 @@ Show function signature when you type
 
 - Virtual text available
 
+## Notice
+
+This branch is:
+
+1. A fork of the original [lsp_signature.nvim](https://github.com/ray-x/lsp_signature.nvim) + additional
+   changes from the other branches not yet merged to upstream.
+2. **Rebased** with upstream and **force-pushed** whenever new changes
+   are introduced in the other branches.
+3. Expected to have conflicts and cause headaches when pulled or fetched.
+4. **AS IS**, use it at your own risk, [here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons).
+
+---
+
 ##### Golang with markdown
 
 Highlight with "Search"
