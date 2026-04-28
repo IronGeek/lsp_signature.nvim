@@ -89,6 +89,7 @@ _LSP_SIG_CFG = {
     return false -- return fn.has('nvim_0.10') == 1
   end,
   hi_parameter = 'LspSignatureActiveParameter',
+  hi_separator = 'LspSignatureDetailSeparator',
   handler_opts = { border = 'rounded' },
   cursorhold_update = true, -- if cursorhold slows down the completion, set to false to disable it
   padding = '',             -- character to pad on left and right of signature
@@ -620,6 +621,18 @@ local signature_handler = function(err, result, ctx, config)
 
     helper.set_keymaps(_LSP_SIG_CFG.winnr, _LSP_SIG_CFG.bufnr)
     log('sig_cfg new bufnr, winnr ', _LSP_SIG_CFG.bufnr, _LSP_SIG_CFG.winnr)
+  end
+
+  local separator = (vim.iter(ipairs(lines or {})):find(function(_, v)
+    return v == '---'
+  end) or 0) - 1
+
+  if separator > 0 and _LSP_SIG_CFG.hi_separator then
+    -- Only add the separator if there are documentation lines (otherwise only display the detail)
+    vim.api.nvim_buf_set_extmark(_LSP_SIG_CFG.bufnr, _LSP_SIG_VT_NS, separator, 0, {
+      virt_text = { { string.rep('─', config.max_width), _LSP_SIG_CFG.hi_separator } },
+      virt_text_pos = 'overlay',
+    })
   end
 
   if _LSP_SIG_CFG.transparency and _LSP_SIG_CFG.transparency > 1 and _LSP_SIG_CFG.transparency < 100 then
@@ -1248,6 +1261,10 @@ M.setup = function(cfg)
       local hi_parameter_hl = vim.api.nvim_get_hl(0, { name = _LSP_SIG_CFG.hi_parameter })
       if hi_parameter_hl == nil or next(hi_parameter_hl) == nil then
         vim.api.nvim_set_hl(0, _LSP_SIG_CFG.hi_parameter, { link = 'Search' })
+      end
+      local hi_separator_hl = vim.api.nvim_get_hl(0, { name = _LSP_SIG_CFG.hi_separator })
+      if hi_separator_hl == nil or next(hi_separator_hl) == nil then
+        vim.api.nvim_set_hl(0, _LSP_SIG_CFG.hi_separator, { link = 'FloatBorder' })
       end
       if _LSP_SIG_CFG.show_struct.enable then
         require('lsp_signature.codeaction').setup(cfg)

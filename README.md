@@ -222,6 +222,7 @@ e.g.
   -- return true | 'inline' to show hint inline, return false | 'eol' to show hint at end of line
   -- return one of: true|false|virt_text_pos: 'eol', 'eol_right_align', 'overlay', 'right_align', 'inline'
   hi_parameter = "LspSignatureActiveParameter", -- how your parameter will be highlight
+  hi_separator = "LspSignatureDetailSeparator", -- highlight for hint detail separator
   handler_opts = {
     border = "rounded"   -- double, rounded, single, shadow, none, or a table of borders
   },
