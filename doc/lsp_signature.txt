@@ -126,6 +126,7 @@ FULL CONFIGURATION (WITH DEFAULT VALUES) *lsp_signature-full_configuration_(with
       -- }
       hint_scheme = "String",
       hi_parameter = "LspSignatureActiveParameter", -- how your parameter will be highlight
+      hi_separator = "LspSignatureDetailSeparator", -- highlight for hint detail separator
       max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
                        -- to view the hiding contents
       max_width = function(), -- max_width of signature floating_window, line will be wrapped if exceed max_width, the value need >= 40, if max_width is a function, it will be evaluated every time
