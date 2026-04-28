@@ -623,16 +623,18 @@ local signature_handler = function(err, result, ctx, config)
     log('sig_cfg new bufnr, winnr ', _LSP_SIG_CFG.bufnr, _LSP_SIG_CFG.winnr)
   end
 
-  local separator = (vim.iter(ipairs(lines or {})):find(function(_, v)
-    return v == '---'
-  end) or 0) - 1
+  if _LSP_SIG_CFG.hi_separator then
+    local separator = (vim.iter(ipairs(lines or {})):find(function(_, v)
+      return v == '---'
+    end) or 0) - 1
 
-  if separator > 0 and _LSP_SIG_CFG.hi_separator then
-    -- Only add the separator if there are documentation lines (otherwise only display the detail)
-    vim.api.nvim_buf_set_extmark(_LSP_SIG_CFG.bufnr, _LSP_SIG_VT_NS, separator, 0, {
-      virt_text = { { string.rep('─', config.max_width), _LSP_SIG_CFG.hi_separator } },
-      virt_text_pos = 'overlay',
-    })
+    if separator > 0 then
+      -- Only add the separator if there are documentation lines (otherwise only display the detail)
+      vim.api.nvim_buf_set_extmark(_LSP_SIG_CFG.bufnr, _LSP_SIG_VT_NS, separator, 0, {
+        virt_text = { { string.rep('─', config.max_width), _LSP_SIG_CFG.hi_separator } },
+        virt_text_pos = 'overlay',
+      })
+    end
   end
 
   if _LSP_SIG_CFG.transparency and _LSP_SIG_CFG.transparency > 1 and _LSP_SIG_CFG.transparency < 100 then
@@ -1262,9 +1264,9 @@ M.setup = function(cfg)
       if hi_parameter_hl == nil or next(hi_parameter_hl) == nil then
         vim.api.nvim_set_hl(0, _LSP_SIG_CFG.hi_parameter, { link = 'Search' })
       end
-      local hi_separator_hl = vim.api.nvim_get_hl(0, { name = _LSP_SIG_CFG.hi_separator })
+      local hi_separator_hl = vim.api.nvim_get_hl(0, { name = 'LspSignatureDetailSeparator' })
       if hi_separator_hl == nil or next(hi_separator_hl) == nil then
-        vim.api.nvim_set_hl(0, _LSP_SIG_CFG.hi_separator, { link = 'FloatBorder' })
+        vim.api.nvim_set_hl(0, 'LspSignatureDetailSeparator', { link = 'FloatBorder' })
       end
       if _LSP_SIG_CFG.show_struct.enable then
         require('lsp_signature.codeaction').setup(cfg)
@@ -1307,5 +1309,6 @@ M.setup_legacy = function(cfg)
 
   -- default if not defined
   vim.cmd([[hi default link LspSignatureActiveParameter Search]])
+  vim.cmd([[hi default link LspSignatureDetailSeparator FloatBorder]])
 end
 return M
