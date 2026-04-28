@@ -107,6 +107,7 @@ _LSP_SIG_CFG = {
   shadow_guibg = 'Black',                                           -- if you using shadow as border use this set the color e.g. 'Green' or '#121315'
   timer_interval = 200,                                             -- default timer check interval
   toggle_key = nil,                                                 -- toggle signature on and off in insert mode,  e.g. '<M-x>'
+  perma_toggle_key = nil,                                           -- permanently toggle signature on and of in insert mode,
   -- set this key also helps if you want see signature in newline
   select_signature_key = nil,                                       -- cycle to next signature, e.g. '<M-n>' function overloading
   -- internal vars, init here to suppress linter warnings
@@ -998,6 +999,11 @@ M.on_attach = function(cfg, bufnr)
       require('lsp_signature').toggle_float_win()
     end, { silent = true, noremap = true, buffer = bufnr, desc = 'toggle signature' })
   end
+  if _LSP_SIG_CFG.perma_toggle_key then
+    vim.keymap.set({ 'i', 'v', 's' }, _LSP_SIG_CFG.perma_toggle_key, function()
+      require('lsp_signature').toggle_float_win(true)
+    end, { silent = true, noremap = true, buffer = bufnr, desc = 'permanently toggle signature' })
+  end
   if _LSP_SIG_CFG.select_signature_key then
     vim.keymap.set('i', _LSP_SIG_CFG.select_signature_key, function()
       require('lsp_signature').signature({ trigger = 'NextSignature' })
@@ -1134,9 +1140,10 @@ M.status_line = function(size)
 end
 
 -- Enables/disables lsp_signature.nvim
+---@param permanent? boolean
 ---@return boolean state true/false if enabled/disabled.
-M.toggle_float_win = function()
-  if _LSP_SIG_CFG.toggle_key_flip_floatwin_setting == true then
+M.toggle_float_win = function(permanent)
+  if _LSP_SIG_CFG.toggle_key_flip_floatwin_setting == true or permanent then
     _LSP_SIG_CFG.floating_window = not _LSP_SIG_CFG.floating_window
   end
 

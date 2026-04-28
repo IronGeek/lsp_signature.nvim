@@ -151,8 +151,9 @@ require "lsp_signature".setup({
 No default keymaps are provided. Following are keymaps available in config:
 
 1. toggle_key: Toggle the signature help window. It manual toggle config.floating_windows on/off
-2. select_signature_key: Select the current signature when multiple signature is available.
-3. move floating window: move_cursor_key, array of two keymaps, if set, you can use these keymaps to move floating
+2. perma_toggle_key: Permanently toggle the signature help window.
+3. select_signature_key: Select the current signature when multiple signature is available.
+4. move floating window: move_cursor_key, array of two keymaps, if set, you can use these keymaps to move floating
    window up and down, default is nil
 
 #### Customize the keymap in your config:
@@ -238,6 +239,7 @@ e.g.
   shadow_guibg = 'Black', -- if you using shadow as border use this set the color e.g. 'Green' or '#121315'
   timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
   toggle_key = nil, -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
+  perma_toggle_key = nil, -- permanently toggle signature on and off in insert mode
   toggle_key_flip_floatwin_setting = false, -- true: toggle floating_windows: true|false setting after toggle key pressed
      -- false: floating_windows setup will not change, toggle_key will pop up signature helper, but signature
      -- may not popup when typing depends on floating_window setting
